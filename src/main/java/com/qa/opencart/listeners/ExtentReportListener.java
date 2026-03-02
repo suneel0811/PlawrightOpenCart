@@ -25,8 +25,9 @@ public class ExtentReportListener implements ITestListener {
     // Always points to your project root
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
     private static final String OUTPUT_FOLDER = PROJECT_ROOT + "/test_reports/";
-    private static final String FILE_NAME = "TestExecutionReport_" +
-            new SimpleDateFormat("ddMMyy_HHmmss").format(new Date()) + ".html";
+//    private static final String FILE_NAME = "TestExecutionReport_" +
+//            new SimpleDateFormat("ddMMyy_HHmmss").format(new Date()) + ".html";
+    private static final String FILE_NAME = "TestExecutionReport.html";
 
     ExtentSparkReporter reporter = new ExtentSparkReporter(OUTPUT_FOLDER + FILE_NAME);
     private static ExtentReports extent = init();
