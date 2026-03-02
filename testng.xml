@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite" parallel="tests" thread-count="2" preserve-order="true" verbose="4">
+
+    <listeners>
+        <listener
+                class-name="com.qa.opencart.listeners.ExtentReportListener" />
+    </listeners>
     <test name="HomePage Test">
         <classes>
             <class name="com.qa.opencart.test.HomePageTest"/>
@@ -11,11 +16,4 @@
             <class name="com.qa.opencart.test.LoginPageTest"/>
         </classes>
     </test>
-    <!--                <methods>-->
-    <!--                    <include name="homePageTitleTest"/>-->
-    <!--                    <include name="homePageUrlTest"/>-->
-    <!--                    <include name="searchResultPageTitleTest"/>-->
-    <!--                </methods>-->
-
-
 </suite>

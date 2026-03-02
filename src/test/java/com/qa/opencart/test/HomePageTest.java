@@ -2,28 +2,21 @@ package com.qa.opencart.test;
 
 import com.qa.opencart.base.BaseTest;
 import com.qa.opencart.constants.AppConstants;
-import org.testng.Assert;
+import com.qa.opencart.utilities.AssertActions;
 import org.testng.annotations.Test;
 
 public class HomePageTest extends BaseTest {
 
 
     @Test
-    public void homePageTitleTest() {
+    public void searchProduct() throws InterruptedException {
         String actualTitle = homePage.getHomePageTitle();
-        Assert.assertEquals(actualTitle, AppConstants.HOME_PAGE_TITLE);
-    }
+        AssertActions.assertEquals(actualTitle, AppConstants.HOME_PAGE_TITLE);
 
-    @Test
-    public void homePageUrlTest() {
         String actualUrl = homePage.getHomePageUrl();
-        Assert.assertEquals(actualUrl, prop.getProperty("url"));
-    }
-
-    @Test
-    public void searchResultPageTitleTest() {
+        AssertActions.assertEquals(actualUrl, prop.getProperty("url"));
         String actualSearchResultPageTitle = homePage.searchProduct("MacBook");
-        Assert.assertEquals(actualSearchResultPageTitle, "Search - MacBook");
+        AssertActions.assertEquals(actualSearchResultPageTitle,"Search - MacBook");
     }
 
 
