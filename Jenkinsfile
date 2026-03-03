@@ -59,17 +59,17 @@ pipeline {
             }
         }
 
-        stage('Publish Extent Report') {
-            steps {
-                publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-project/test_reports',
-                    reportFiles: 'TestExecutionReport.html',
-                    reportName: 'Extent Report'
-                ])
-            }
-        }
+        post {
+             always {
+                 publishHTML([
+                     allowMissing: true,
+                     alwaysLinkToLastBuild: true,
+                     keepAll: true,
+                     reportDir: 'playwright-project/test_reports',
+                     reportFiles: 'TestExecutionReport.html',
+                     reportName: 'Extent Report'
+                 ])
+             }
+         }
     }
 }
