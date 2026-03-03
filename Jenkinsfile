@@ -59,17 +59,19 @@ pipeline {
             }
         }
 
-        post {
-             always {
-                 publishHTML([
-                     allowMissing: true,
-                     alwaysLinkToLastBuild: true,
-                     keepAll: true,
-                     reportDir: 'playwright-project/test_reports',
-                     reportFiles: 'TestExecutionReport.html',
-                     reportName: 'Extent Report'
-                 ])
-             }
-         }
+    }
+
+    // Pipeline-level post block ensures Extent report is always published
+    post {
+        always {
+            publishHTML([
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'playwright-project/test_reports',
+                reportFiles: 'TestExecutionReport.html',
+                reportName: 'Extent Report'
+            ])
+        }
     }
 }
