@@ -25,8 +25,6 @@ public class ExtentReportListener implements ITestListener {
     // Always points to your project root
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
     private static final String OUTPUT_FOLDER = PROJECT_ROOT + "/test_reports/";
-//    private static final String FILE_NAME = "TestExecutionReport_" +
-//            new SimpleDateFormat("ddMMyy_HHmmss").format(new Date()) + ".html";
     private static final String FILE_NAME = "TestExecutionReport.html";
 
     ExtentSparkReporter reporter = new ExtentSparkReporter(OUTPUT_FOLDER + FILE_NAME);
@@ -36,7 +34,6 @@ public class ExtentReportListener implements ITestListener {
     private static ExtentReports extentReports;
 
     private static ExtentReports init() {
-
         Path path = Paths.get(OUTPUT_FOLDER);
         if (!Files.exists(path)) {
             try {
@@ -58,7 +55,7 @@ public class ExtentReportListener implements ITestListener {
         return extentReports;
     }
 
-    //Centralized log method for nodes
+    // Centralized log method for nodes
     public static void log(Status status, String message) {
         if (status == Status.INFO) {
             ExtentTest node = test.get().createNode(message);
@@ -109,6 +106,10 @@ public class ExtentReportListener implements ITestListener {
                 MediaEntityBuilder.createScreenCaptureFromBase64String(
                         takeScreenshot(), result.getMethod().getMethodName()).build());
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
+
+        // Cleanup ThreadLocal
+        test.remove();
+        currentNode.remove();
     }
 
     @Override
@@ -118,6 +119,10 @@ public class ExtentReportListener implements ITestListener {
                 MediaEntityBuilder.createScreenCaptureFromBase64String(
                         takeScreenshot(), result.getMethod().getMethodName()).build());
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
+
+        // Cleanup ThreadLocal
+        test.remove();
+        currentNode.remove();
     }
 
     @Override
@@ -127,6 +132,10 @@ public class ExtentReportListener implements ITestListener {
                 MediaEntityBuilder.createScreenCaptureFromBase64String(
                         takeScreenshot(), result.getMethod().getMethodName()).build());
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
+
+        // Cleanup ThreadLocal
+        test.remove();
+        currentNode.remove();
     }
 
     @Override
