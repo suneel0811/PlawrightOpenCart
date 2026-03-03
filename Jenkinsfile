@@ -1,63 +1,74 @@
-pipeline
-{
+pipeline {
     agent any
 
-    tools{
-    	maven 'maven'
-        }
+    tools {
+        maven 'maven'
+    }
 
-    stages
-    {
-        stage('Build')
-        {
-            steps
-            {
-                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
-            post
-            {
-                success
-                {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
-            }
-        }
+    stages {
 
-
-
-        stage("Deploy to QA"){
-            steps{
-                echo("deploy to qa")
-            }
-        }
-
-        stage('Regression Automation Test') {
+        stage('Checkout Build Repo') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/suneel0811/PlawrightOpenCart'
-                    sh "mvn clean test -Dsurefire.suiteXmlFiles=testng.xml"
-
+                dir('build-project') {
+                    git 'https://github.com/jglick/simple-maven-project-with-tests.git'
                 }
             }
         }
 
-
-        stage('Publish Extent Report'){
-            steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false,
-                                  keepAll: true,
-                                  reportDir: 'test_reports',
-                                  reportFiles: 'TestExecutionReport.html',
-                                  reportName: 'HTML Extent Report',
-                                  reportTitles: ''])
+        stage('Build Maven Project') {
+            steps {
+                dir('build-project') {
+                    sh 'mvn -Dmaven.test.failure.ignore=true clean package'
+                }
+            }
+            post {
+                always {
+                    junit 'build-project/**/surefire-reports/*.xml'
+                    archiveArtifacts 'build-project/target/*.jar'
+                }
             }
         }
 
+        stage('Checkout Playwright Repo') {
+            steps {
+                dir('playwright-project') {
+                    git 'https://github.com/suneel0811/PlawrightOpenCart'
+                }
+            }
+        }
 
+        stage('Install Playwright Browsers') {
+            steps {
+                dir('playwright-project') {
+                    sh 'mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"'
+                }
+            }
+        }
 
+        stage('Run Playwright Tests') {
+            steps {
+                dir('playwright-project') {
+                    sh 'mvn clean test -Dsurefire.suiteXmlFiles=testng.xml'
+                }
+            }
+            post {
+                always {
+                    junit 'playwright-project/**/surefire-reports/*.xml'
+                }
+            }
+        }
 
+        stage('Publish Extent Report') {
+            steps {
+                publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'playwright-project/test_reports',
+                    reportFiles: 'TestExecutionReport.html',
+                    reportName: 'Extent Report'
+                ])
+            }
+        }
     }
 }
