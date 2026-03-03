@@ -3,38 +3,36 @@ package com.qa.opencart.utilities;
 import com.aventstack.extentreports.Status;
 import com.qa.opencart.listeners.ExtentReportListener;
 
-/**
- * Centralized logging utility for test execution.
- * Decouples test code from reporting implementation.
- * Logs routed through ExtentReportListener centralized handler.
- */
 public final class Logs {
 
-    // Prevent instantiation
-    private Logs() {}
+    private Logs() {} // Prevent instantiation
 
-    /** Log informational message */
+    private static void safeLog(Status status, String message) {
+        if (ExtentReportListener.test.get() != null) {
+            ExtentReportListener.test.get().log(status, message);
+        } else {
+            // Fallback to console logging if ExtentTest is not initialized
+            System.out.println("[" + status + "] " + message);
+        }
+    }
+
     public static void info(String message) {
-        ExtentReportListener.test.get().log(Status.INFO, message);
+        safeLog(Status.INFO, message);
     }
 
-    /** Log passed step */
     public static void pass(String message) {
-        ExtentReportListener.test.get().log(Status.PASS, message);
+        safeLog(Status.PASS, message);
     }
 
-    /** Log failed step */
     public static void fail(String message) {
-        ExtentReportListener.test.get().log(Status.FAIL, message);
+        safeLog(Status.FAIL, message);
     }
 
-    /** Log warning message */
     public static void warn(String message) {
-        ExtentReportListener.test.get().log(Status.WARNING, message);
+        safeLog(Status.WARNING, message);
     }
 
-    /** Log skip message */
     public static void skip(String message) {
-        ExtentReportListener.test.get().log(Status.SKIP, message);
+        safeLog(Status.SKIP, message);
     }
 }
