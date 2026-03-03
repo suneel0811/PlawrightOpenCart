@@ -32,7 +32,8 @@ pipeline {
         stage('Checkout Playwright Repo') {
             steps {
                 dir('playwright-project') {
-                    git 'https://github.com/suneel0811/PlawrightOpenCart'
+                    git branch: 'main',
+                        url: 'https://github.com/suneel0811/PlawrightOpenCart'
                 }
             }
         }
