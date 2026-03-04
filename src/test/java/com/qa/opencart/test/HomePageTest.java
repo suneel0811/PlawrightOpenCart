@@ -17,6 +17,7 @@ public class HomePageTest extends BaseTest {
         AssertActions.assertEquals(actualUrl, prop.getProperty("url"));
         String actualSearchResultPageTitle = homePage.searchProduct("MacBook");
         AssertActions.assertEquals(actualSearchResultPageTitle,"Search - MacBook");
+        AssertActions.assertEquals(actualSearchResultPageTitle,"Search - MacBook");
     }
 
 
